@@ -107,7 +107,7 @@ public final class CooldownManager{
 	 * @param uuid the player to check
 	 * @return boolean true if the player has a cooldown left false if no entry exists or it expired.
 	 */
-	public synchronized boolean isCooldown(String key, UUID uuid) {
+	public synchronized boolean hasCooldown(String key, UUID uuid) {
 		createCooldown(key);
 		return getCooldown(key, uuid).isExpired();
 	}
@@ -119,8 +119,8 @@ public final class CooldownManager{
 	 * @param player the player to check
 	 * @return boolean true if the player has a cooldown left false if no entry exists or it expired.
 	 */
-	public synchronized boolean isCooldown(String key, Player player) {
-		return isCooldown(key, player.getUniqueId());
+	public synchronized boolean hasCooldown(String key, Player player) {
+		return hasCooldown(key, player.getUniqueId());
 	}
 	
 	/**
