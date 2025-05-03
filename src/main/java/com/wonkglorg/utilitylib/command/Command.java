@@ -86,7 +86,10 @@ public abstract class Command extends Arguments implements TabExecutor{
 	 * @param args   Following arguments to main command.
 	 * @return List of Strings to display for the current argument, returns list of players if null.
 	 */
-	public abstract List<String> tabComplete(@NotNull Player player, String[] args);
+	public abstract List<String> tabComplete(@NotNull Player player,
+											 @NotNull org.bukkit.command.Command command,
+											 @NotNull String alias,
+											 String[] args);
 	
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender,
@@ -111,7 +114,7 @@ public abstract class Command extends Arguments implements TabExecutor{
 												@NotNull String[] args) {
 		if(sender instanceof Player player){
 			super.args = args;
-			return tabComplete(player, args);
+			return tabComplete(player, command, alias, args);
 		}
 		return null;
 		
