@@ -63,6 +63,11 @@ public final class MockInventory implements Inventory{
 	}
 	
 	@Override
+	public @NotNull HashMap<Integer, ItemStack> removeItemAnySlot(@NotNull ItemStack... items) throws IllegalArgumentException {
+		return null;
+	}
+	
+	@Override
 	public ItemStack @NotNull [] getContents() {
 		return items;
 	}
@@ -192,6 +197,11 @@ public final class MockInventory implements Inventory{
 	}
 	
 	@Override
+	public int close() {
+		return 0;
+	}
+	
+	@Override
 	public @NotNull List<HumanEntity> getViewers() {
 		return new ArrayList<>();
 	}
@@ -204,6 +214,11 @@ public final class MockInventory implements Inventory{
 	@Override
 	public InventoryHolder getHolder() {
 		return holder;
+	}
+	
+	@Override
+	public @Nullable InventoryHolder getHolder(boolean useSnapshot) {
+		return null;
 	}
 	
 	@Override

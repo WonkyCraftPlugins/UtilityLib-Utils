@@ -22,7 +22,7 @@ public final class SelectionBuilder{
 		if(location1 == null || location2 == null){
 			return null;
 		}
-		return new Cuboid(location1, location2);
+		return Cuboid.create(location1, location2);
 	}
 	
 	public SelectionBuilder setCorner1(Location location) {
