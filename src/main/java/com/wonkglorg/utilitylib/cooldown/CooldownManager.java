@@ -71,12 +71,12 @@ public final class CooldownManager{
 	/**
 	 * Adds a new cooldown for the specified player
 	 * @param key the key to add the cooldown for
-	 * @param player the player to add the cooldown for
+	 * @param uuid the player to add the cooldown for
 	 * @param duration the duration of the cooldown in seconds
 	 *  @param unit the time unit to use (If the resulting units size in milliseconds exceeds the
 	 */
-	public synchronized void addCooldown(String key, Player player, long duration, ChronoUnit unit) {
-		addCooldown(key, player.getUniqueId(), new Cooldown(duration, unit));
+	public synchronized void addCooldown(String key, UUID uuid, long duration, ChronoUnit unit) {
+		addCooldown(key, uuid, new Cooldown(duration, unit));
 	}
 	
 	/**
