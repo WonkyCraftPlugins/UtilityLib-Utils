@@ -12,14 +12,14 @@ public abstract class Subcommand extends Arguments{
 		return execute(sender, args);
 	}
 	
-	public List<String> executeTabComplete(String alias, String[] args, int offset) {
+	public List<String> executeTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args, int offset) {
 		this.args = args;
 		this.parentCount = offset;
-		return tabComplete(alias, args);
+		return tabComplete(sender, command, alias, args);
 	}
 	
 	public abstract boolean execute(CommandSender sender, String[] args);
 	
-	public abstract List<String> tabComplete(String alias, String[] args);
+	public abstract List<String> tabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args);
 	
 }
