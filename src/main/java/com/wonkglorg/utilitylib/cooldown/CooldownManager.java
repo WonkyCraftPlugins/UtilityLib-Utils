@@ -4,6 +4,8 @@ import com.wonkglorg.utilitylib.converter.time.TimeBuilder;
 import org.bukkit.entity.Player;
 
 import javax.annotation.concurrent.ThreadSafe;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -18,7 +20,7 @@ public final class CooldownManager{
 	private final Map<String, Map<UUID, Cooldown>> cooldowns = new ConcurrentHashMap<>();
 	
 	public CooldownManager() {
-		//
+		//Singleton Constructor
 	}
 	
 	/**
@@ -45,6 +47,39 @@ public final class CooldownManager{
 	}
 	
 	/**
+	 * Adds a cooldown for the specified player
+	 * @param key the key to add the cooldown to
+	 * @param uuid the player to add the cooldown for
+	 * @param duration the duration of the cooldown
+	 */
+	public synchronized void addCooldown(String key, UUID uuid, Duration duration) {
+		createCooldown(key);
+		cooldowns.get(key).put(uuid, new Cooldown(duration));
+	}
+	
+	/**
+	 * Adds a cooldown for the specified player
+	 * @param key the key to add the cooldown to
+	 * @param uuid the player to add the cooldown for
+	 * @param cooldown the cooldown to add
+	 */
+	public synchronized void addCooldown(String key, UUID uuid, Cooldown cooldown) {
+		createCooldown(key);
+		cooldowns.get(key).put(uuid, cooldown);
+	}
+	
+	/**
+	 * Adds a new cooldown for the specified player
+	 * @param key the key to add the cooldown for
+	 * @param player the player to add the cooldown for
+	 * @param duration the duration of the cooldown in seconds
+	 *  @param unit the time unit to use (If the resulting units size in milliseconds exceeds the
+	 */
+	public synchronized void addCooldown(String key, Player player, long duration, ChronoUnit unit) {
+		addCooldown(key, player.getUniqueId(), new Cooldown(duration, unit));
+	}
+	
+	/**
 	 * Removes the cooldown for the specified player
 	 *
 	 * @param key  the key to remove the cooldown from
@@ -66,56 +101,6 @@ public final class CooldownManager{
 	}
 	
 	/**
-	 * Adds a new cooldown for the specified player
-	 *
-	 * @param key     the key to add the cooldown for
-	 * @param uuid    the player to add the cooldown for
-	 * @param seconds the duration of the cooldown in seconds
-	 */
-	public synchronized void addCooldown(String key, UUID uuid, int seconds) {
-		createCooldown(key);
-		
-		long next = System.currentTimeMillis() + seconds * 1000L;
-		getCooldowns(key).put(uuid, new Cooldown(next));
-	}
-	
-	/**
-	 * Adds a new cooldown for the specified player
-	 *
-	 * @param key          the key to add the cooldown for
-	 * @param player       the player to add the cooldown for
-	 * @param milliseconds the duration of the cooldown in milliseconds
-	 */
-	public synchronized void addEntry(String key, Player player, long milliseconds) {
-		createCooldown(key);
-		
-		getCooldowns(key).put(player.getUniqueId(), new Cooldown(milliseconds));
-	}
-	
-	/**
-	 * Adds a new cooldown for the specified player
-	 *
-	 * @param key  the key to add the cooldown for
-	 * @param uuid the player to add the cooldown for
-	 * @param time the duration of the cooldown in milliseconds
-	 */
-	public synchronized void addEntry(String key, UUID uuid, Long time) {
-		createCooldown(key);
-		getCooldowns(key).put(uuid, new Cooldown(time));
-	}
-	
-	/**
-	 * Adds a new cooldown for the specified player
-	 *
-	 * @param key     the key to add the cooldown for
-	 * @param player  the player to add the cooldown for
-	 * @param seconds the duration of the cooldown in seconds
-	 */
-	public synchronized void addCooldown(String key, Player player, int seconds) {
-		addCooldown(key, player.getUniqueId(), seconds * 1000);
-	}
-	
-	/**
 	 * Checks if the player has a cooldown left for the specified key
 	 *
 	 * @param key  the key to check
@@ -123,7 +108,6 @@ public final class CooldownManager{
 	 * @return boolean true if the player has a cooldown left false if no entry exists or it expired.
 	 */
 	public synchronized boolean isCooldown(String key, UUID uuid) {
-		
 		createCooldown(key);
 		return getCooldown(key, uuid).isExpired();
 	}
